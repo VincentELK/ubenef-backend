@@ -1,0 +1,14 @@
+[
+  {
+    "date": "22/3/2026",
+    "distance": 20,
+    "price": 20.0,
+    "duration": 10
+  },
+  {
+    "date": "22/3/2026",
+    "distance": 10,
+    "price": 20.0,
+    "duration": 555
+  }
+]
