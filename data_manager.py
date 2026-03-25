@@ -22,10 +22,9 @@ def save_data(delivery_data):
         data = load_data()
         
         if not data:
-            print(f"First save")
+            print(f"Premiere sauvegarde")
 
-        else:
-             print(f"Adding delivery")
+        
         
         data.append(delivery_data)
         with open("courses.json", "w") as f:
