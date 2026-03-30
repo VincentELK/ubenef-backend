@@ -16,4 +16,4 @@ def average_turnover(delivery_list):
 def price_by_kilometer(distance, turnover):
     return turnover/distance
 def total_duration(delivery_list):
-    for de
+    pass
