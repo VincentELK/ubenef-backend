@@ -42,12 +42,12 @@ def display_delivery_list():
         delivery_price    = delivery["price"]
         delivery_duration = delivery["duration"]
         delivery_date     = delivery["date"]
-        print(f"""-------------------------------\n 
+        print(f"""\n-------------------------------\n 
               Livraison du {delivery_date}:\n
               Montant : {delivery_price} EU\n
               Distance : {delivery_distance} KM\n
-              Durée : {delivery_duration} Minutes\n
-              -------------------------------------
+              Durée : {delivery_duration} minutes\n
+-------------------------------------
 """)
     
     

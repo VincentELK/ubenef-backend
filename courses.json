@@ -1,8 +1,20 @@
 [
   {
-    "date": "25/3/2026",
-    "distance": 10.0,
-    "price": 20.0,
-    "duration": 20.0
+    "date": "30/3/2026",
+    "distance": 20.0,
+    "price": 5.0,
+    "duration": 5.0
+  },
+  {
+    "date": "30/3/2026",
+    "distance": 5.0,
+    "price": 10.0,
+    "duration": 4.0
+  },
+  {
+    "date": "30/3/2026",
+    "distance": 8.0,
+    "price": 6.0,
+    "duration": 10.0
   }
 ]
