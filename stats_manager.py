@@ -14,6 +14,15 @@ def average_turnover(delivery_list):
     return total_turnover(delivery_list) / len(delivery_list)
 
 def price_by_kilometer(distance, turnover):
-    return turnover/distance
+
+    return round(turnover/distance,2)
+
 def total_duration(delivery_list):
-    pass
+    total = 0
+    for delivery in delivery_list:
+        total_duration +=  delivery["duration"]
+    return total
+
+def price_by_hour(price, duration):
+    hour = duration / 60
+    return round(price / hour,2)

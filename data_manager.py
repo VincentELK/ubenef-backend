@@ -9,12 +9,11 @@ def load_data():
             if not data :
                 data = []
         return data
-    except FileNotFoundError:
+    except (FileNotFoundError, JSONDecodeError):
         data = []
         return data
-    except JSONDecodeError:
-        data = []
-        return data
+
+
     
 def save_data(delivery_data):
     
@@ -24,13 +23,10 @@ def save_data(delivery_data):
         if not data:
             print(f"Premiere sauvegarde")
 
-        
-        
         data.append(delivery_data)
         with open("courses.json", "w") as f:
             json.dump(data, f, indent=2)
                 
-        
     except FileNotFoundError:
         print("Fichier introuvable")
 

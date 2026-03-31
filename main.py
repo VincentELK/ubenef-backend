@@ -5,6 +5,9 @@ import stats_manager as stats_mng
 
 
 def get_delivery_input():
+    distance_boundary = (1, 30)
+    price_boundary = (1, 20)
+    duration_boundary = (1, 40)
     while True:
 
         distance = input("Distance parcourue (kilometres):")
@@ -14,6 +17,17 @@ def get_delivery_input():
             distance = float(distance)
             price    = float(price)
             duration = float(duration)
+
+            if not distance_boundary[0] <= distance <= distance_boundary[1]:
+                print(f"La valeur de distance : {distance}, doit etre comprise entre {distance_boundary[0]} et {distance_boundary[1]}")
+                continue
+            if not price_boundary[0] <=  price <= price_boundary[1]:
+                print(f"La valeur de prix : {price}, doit etre comprise entre {price_boundary[0]} et {price_boundary[1]}")
+                continue
+            if not duration_boundary[0] <= duration <= duration_boundary[1]:
+                print(f"La valeur de temp {duration} doit etre comprise entre {duration_boundary[0]} et {duration_boundary[1]}")
+                continue
+
         except ValueError:
             print("Entrez une valeur numerique")
             continue
@@ -51,6 +65,9 @@ def main():
 
         if choice == 1:
             distance,price,duration = get_delivery_input()
+            
+            
+             
 
             delivery = create_delivery(distance, price, duration)
             data_mng.save_data(delivery)
@@ -72,14 +89,18 @@ def main():
             total_distance = stats_mng.total_distance(delivery_list)
             average_turnover = stats_mng.average_turnover(delivery_list)
             total_turnover = stats_mng.total_turnover(delivery_list)
-            
+            total_duration = stats_mng.total_duration(delivery_list)
+            price_by_distance = stats_mng.price_by_kilometer(total_distance, total_turnover)
             print("------- Mes statistiques ------ :\n")
             print(f"Nombre de livraisons total : {len(delivery_list)}")
             print(f"Distance totale : {total_distance} KM")
             print(f"Chiffre d'affaire total : {total_turnover} euros")
             print(f"Moyenne de chiffre d'affaire : {average_turnover} euros ")
-            print(f"Revenue au Kilomètre : {round(total_distance / total_turnover,2)}")
+            print(f"Revenue au Kilomètre : {price_by_distance}")
+            print(f"Temp de livraison total (minutes) : {total_duration}")
+            print(f"Revenue de l'heure : {stats_mng.price_by_hour(total_turnover, total_duration)}")
             print("=" * 40)
+
             
             
         elif choice == len(actions):

@@ -16,5 +16,11 @@
     "distance": 8.0,
     "price": 6.0,
     "duration": 10.0
+  },
+  {
+    "date": "31/3/2026",
+    "distance": 1.0,
+    "price": 20.0,
+    "duration": 30.0
   }
 ]
