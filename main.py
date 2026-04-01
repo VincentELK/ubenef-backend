@@ -2,37 +2,34 @@ import json
 import data_manager as data_mng
 from delivery_manager import create_delivery
 import stats_manager as stats_mng
-
+from delivery_input_validation import validate_input
 
 def get_delivery_input():
-    distance_boundary = (1, 30)
-    price_boundary = (1, 20)
-    duration_boundary = (1, 40)
+    
     while True:
 
         distance = input("Distance parcourue (kilometres):")
         price    = input("Prix de la livraison :")
         duration = input("Durée de la livraison (minutes) :")
+
         try :
             distance = float(distance)
             price    = float(price)
             duration = float(duration)
 
-            if not distance_boundary[0] <= distance <= distance_boundary[1]:
-                print(f"La valeur de distance : {distance}, doit etre comprise entre {distance_boundary[0]} et {distance_boundary[1]}")
-                continue
-            if not price_boundary[0] <=  price <= price_boundary[1]:
-                print(f"La valeur de prix : {price}, doit etre comprise entre {price_boundary[0]} et {price_boundary[1]}")
-                continue
-            if not duration_boundary[0] <= duration <= duration_boundary[1]:
-                print(f"La valeur de temp {duration} doit etre comprise entre {duration_boundary[0]} et {duration_boundary[1]}")
-                continue
+            errors_list = validate_input(distance, price, duration)
 
+            if errors_list:
+                for error in errors_list:
+                    print(f"\nErreur(s) détectée(s): {error}\n")
+                
+                continue
+            
         except ValueError:
             print("Entrez une valeur numerique")
             continue
-        break
-    return distance,price,duration
+        
+        return distance, price, duration
 
 
 def main():
@@ -44,13 +41,13 @@ def main():
         "Quitter",
     ]
     number_of_actions = len(actions)
-    print("Choisissez parmis les options suivante :")
+    print("\nChoisissez parmis les options suivante :")
 
     while True:
         for i, action in enumerate(actions):
             print(f"{i + 1}. {action}")
 
-        choice = input("Quel est votre choix ? ")
+        choice = input("\nQuel est votre choix ? ")
         
         try: 
             choice = int(choice)
@@ -72,7 +69,7 @@ def main():
             delivery = create_delivery(distance, price, duration)
             data_mng.save_data(delivery)
     
-            print(f"\nSauvegarde de la livraison en date du {delivery['date']}\n1")
+            print(f"\nSauvegarde de la livraison en date du {delivery['date']}\n")
                 
         elif choice == 2:
             print("Affichage des livraisons sauvegardées :")
