@@ -20,8 +20,9 @@ def get_delivery_input():
             errors_list = validate_input(distance, price, duration)
 
             if errors_list:
+                print(f"\nErreur(s) détectée(s):\n")
                 for error in errors_list:
-                    print(f"\nErreur(s) détectée(s): {error}\n")
+                    print(f"{error}\n")
                 
                 continue
             

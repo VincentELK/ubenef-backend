@@ -4,5 +4,11 @@
     "distance": 10.0,
     "price": 5.0,
     "duration": 8.0
+  },
+  {
+    "date": "3/4/2026",
+    "distance": 10.0,
+    "price": 20.0,
+    "duration": 10.0
   }
 ]
