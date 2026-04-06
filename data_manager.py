@@ -1,50 +1,49 @@
 import json
 from json import JSONDecodeError
+from delivery_manager import Delivery
 
+class DataManager():
+    def __init__(self):
+        self.filepath = "courses.json"
 
-def load_data():
-    try:
-        with open("courses.json", "r") as f:
-            data = json.load(f)
-            if not data :
-                data = []
-        return data
-    except (FileNotFoundError, JSONDecodeError):
-        data = []
-        return data
-
-
-    
-def save_data(delivery_data):
-    
-    try :
-        data = load_data()
-        
-        if not data:
-            print(f"Premiere sauvegarde")
-
-        data.append(delivery_data)
-        with open("courses.json", "w") as f:
-            json.dump(data, f, indent=2)
+    def load_deliveries(self):
+        try:
+            with open(self.filepath, "r") as f:
+                deliverys_list = json.load(f)
+                if not deliverys_list:
+                    deliverys_list = []
+                deliveries_object_list = []
                 
-    except FileNotFoundError:
-        print("Fichier introuvable")
+                for delivery in deliverys_list:
+                    delivery_date = delivery["delivery_date"]
+                    distance = delivery["delivery_distance"]
+                    price    = delivery["delivery_price"]
+                    duration = delivery["delivery_duration"]
 
-def display_delivery_list():
-    data = load_data()
+                    delivery_object = Delivery(distance, price, duration, delivery_date)
+                    deliveries_object_list.append(delivery_object)
 
-    for delivery in data:
-        delivery_distance = delivery["distance"]
-        delivery_price    = delivery["price"]
-        delivery_duration = delivery["duration"]
-        delivery_date     = delivery["date"]
-        print(f"""\n-------------------------------\n 
-              Livraison du {delivery_date}:\n
-              Montant : {delivery_price} EU\n
-              Distance : {delivery_distance} KM\n
-              Durée : {delivery_duration} minutes\n
--------------------------------------
-""")
+                return deliveries_object_list
+                       
+        except (FileNotFoundError, JSONDecodeError):
+            deliverys_list = []
+            return deliverys_list
+    
+    def save_delivery(self, delivery_obj):
+        try:
+            deliveries_list_obj = self.load_deliveries()
+            
+            deliveries_list_obj.append(delivery_obj)
+            deliveries_data_list = [data.to_dict() for data in deliveries_list_obj] # get all data from the deliveries_list_obj -> dict -> list
+
+            with open(self.filepath, "w") as f:
+                json.dump(deliveries_data_list, f, indent=2)
+
+        except FileNotFoundError:
+            return f"No file found at {self.filepath}"
+
+
+
     
     
 
