@@ -1,5 +1,5 @@
 import json
-from data_manager import DataManager
+from data_manager import DataBaseManager
 from delivery_manager import Delivery
 import stats_manager as stats_mng
 from delivery_input_validation import validate_input
@@ -9,9 +9,10 @@ def get_delivery_input():
     
     while True:
 
-        distance = input("Distance parcourue (kilometres):")
-        price    = input("Prix de la livraison :")
-        duration = input("Durée de la livraison (minutes) :")
+        distance = input("Distance parcourue (kilometres): ")
+        price    = input("Prix de la livraison4" \
+        ": ")
+        duration = input("Durée de la livraison (minutes): ")
 
         try :
             distance = float(distance)
@@ -66,7 +67,7 @@ def main():
 
         if choice == 1:
             new_delivery = get_delivery_input()
-            data_manager = DataManager()
+            data_manager = DataBaseManager()
             data_manager.save_delivery(new_delivery)
             
     

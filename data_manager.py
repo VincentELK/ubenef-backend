@@ -1,47 +1,55 @@
 import json
 from json import JSONDecodeError
 from delivery_manager import Delivery
+import sqlite3
 
-class DataManager():
+
+
+class DataBaseManager():
     def __init__(self):
+        self.connection = sqlite3.connect("deliveries.db")
+        self.cursor = self.connection.cursor()
         self.filepath = "courses.json"
-
-    def load_deliveries(self):
-        try:
-            with open(self.filepath, "r") as f:
-                deliverys_list = json.load(f)
-                if not deliverys_list:
-                    deliverys_list = []
-                deliveries_object_list = []
-                
-                for delivery in deliverys_list:
-                    delivery_date = delivery["delivery_date"]
-                    distance = delivery["delivery_distance"]
-                    price    = delivery["delivery_price"]
-                    duration = delivery["delivery_duration"]
-
-                    delivery_object = Delivery(distance, price, duration, delivery_date)
-                    deliveries_object_list.append(delivery_object)
-
-                return deliveries_object_list
-                       
-        except (FileNotFoundError, JSONDecodeError):
-            deliverys_list = []
-            return deliverys_list
     
+    def create_deliveries_table(self):
+        self.cursor.execute("""
+                            CREATE TABLE IF NOT EXISTS deliveries(
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                            distance REAL NOT NULL,
+                            price REAL NOT NULL,
+                            duration REAL NOT NULL,
+                            date TEXT NOT NULL
+                            );""")
+        self.connection.commit()
+
+
     def save_delivery(self, delivery_obj):
         try:
-            deliveries_list_obj = self.load_deliveries()
-            
-            deliveries_list_obj.append(delivery_obj)
-            deliveries_data_list = [data.to_dict() for data in deliveries_list_obj] # get all data from the deliveries_list_obj -> dict -> list
-
-            with open(self.filepath, "w") as f:
-                json.dump(deliveries_data_list, f, indent=2)
+            delivery_dict = delivery_obj.to_dict()
+            delivery_data = (delivery_dict["delivery_distance"],
+                             delivery_dict["delivery_price"],
+                             delivery_dict["delivery_duration"],
+                             delivery_dict["delivery_date"],
+                             )
+            self.cursor.execute("""
+                                INSERT INTO deliveries(distance, price, duration, date) 
+                                VALUES(?, ?, ?, ?)""", delivery_data
+                                )
+            self.connection.commit()       
 
         except FileNotFoundError:
             return f"No file found at {self.filepath}"
 
+db_manager = DataBaseManager()
+connection = db_manager.connection
+db_manager.create_deliveries_table()
+result = db_manager.cursor.execute("SELECT name FROM sqlite_master")
+# query = "PRAGMA table_info(deliveries);"
+# db_manager.cursor.execute(query)
+# colonnes = db_manager.cursor.fetchall()
+
+# for col in colonnes:
+#     print(col)
 
 
     

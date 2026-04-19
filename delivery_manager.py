@@ -15,7 +15,12 @@ class Delivery():
         return formated_date
     
     def to_dict(self):
-        return {"delivery_distance": self.distance, "delivery_price": self.price, "delivery_duration": self.duration, "delivery_date": self.date}
+        return {
+        "delivery_distance": self.distance, 
+        "delivery_price": self.price,
+        "delivery_duration": self.duration, 
+        "delivery_date": self.date
+        }
 
     def price_per_kilometer(self):
         return round(self.price / self.distance, 2)
