@@ -39,17 +39,23 @@ class DataBaseManager():
 
         except FileNotFoundError:
             return f"No file found at {self.filepath}"
-
+        
+    def get_deliveries(self):
+        delivery = self.cursor.execute("""SELECT distance, price, duration, date FROM deliveries""" )
+        for row in delivery:
+            print(row)
+            # Recuperation de chaque ligne de la table
+            # (a finir)
 db_manager = DataBaseManager()
 connection = db_manager.connection
 db_manager.create_deliveries_table()
-result = db_manager.cursor.execute("SELECT name FROM sqlite_master")
+# result = db_manager.cursor.execute("SELECT name FROM sqlite_master")
 # query = "PRAGMA table_info(deliveries);"
-# db_manager.cursor.execute(query)
 # colonnes = db_manager.cursor.fetchall()
 
 # for col in colonnes:
 #     print(col)
+db_manager.get_deliveries()
 
 
     

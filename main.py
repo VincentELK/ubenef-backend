@@ -10,8 +10,7 @@ def get_delivery_input():
     while True:
 
         distance = input("Distance parcourue (kilometres): ")
-        price    = input("Prix de la livraison4" \
-        ": ")
+        price    = input("Prix de la livraison: ")
         duration = input("Durée de la livraison (minutes): ")
 
         try :
