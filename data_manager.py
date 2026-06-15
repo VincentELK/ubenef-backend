@@ -37,25 +37,24 @@ class DataBaseManager():
                                 )
             self.connection.commit()       
 
-        except FileNotFoundError:
-            return f"No file found at {self.filepath}"
+        except sqlite3.Error as e:
+            return f"Erreur lors de l'enregistrement des données : {e}"
         
     def get_deliveries(self):
         delivery = self.cursor.execute("""SELECT distance, price, duration, date FROM deliveries""" )
+        deliveries_object_list = []
         for row in delivery:
-            print(row)
-            # Recuperation de chaque ligne de la table
-            # (a finir)
-db_manager = DataBaseManager()
-connection = db_manager.connection
-db_manager.create_deliveries_table()
-# result = db_manager.cursor.execute("SELECT name FROM sqlite_master")
-# query = "PRAGMA table_info(deliveries);"
-# colonnes = db_manager.cursor.fetchall()
+            
 
-# for col in colonnes:
-#     print(col)
-db_manager.get_deliveries()
+            db_distance = row[0]
+            db_price = row[1]
+            db_duration = row[2]
+            db_date = row[3]
+            delivery_object = Delivery(db_distance, db_price, db_duration, db_date)
+            deliveries_object_list.append(delivery_object)
+        return deliveries_object_list
+    
+
 
 
     

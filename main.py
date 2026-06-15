@@ -3,7 +3,7 @@ from data_manager import DataBaseManager
 from delivery_manager import Delivery
 import stats_manager as stats_mng
 from delivery_input_validation import validate_input
-
+data_manager = DataBaseManager()
 
 def get_delivery_input():
     
@@ -66,19 +66,25 @@ def main():
 
         if choice == 1:
             new_delivery = get_delivery_input()
-            data_manager = DataBaseManager()
+            
             data_manager.save_delivery(new_delivery)
             
     
             print(f"\nSauvegarde de la livraison en date du {new_delivery.date}\n")
                 
         elif choice == 2:
-            print("Affichage des livraisons sauvegardées :")
+            print("Affichage des livraisons sauvegardées :\n")
 
+            for delivery in data_manager.get_deliveries():
+                
+                print(f"Livraison du {delivery.date}")
+                print(f"  - Distance : {delivery.distance} km")
+                print(f"  - Temps    : {delivery.duration} min")
+                print(f"  - Prix     : {delivery.price} Euros\n")
             
 
         elif choice == 3:
-            print("Modificatiosn en cours ...")
+            print("Modifications en cours ...")
           
             
             
