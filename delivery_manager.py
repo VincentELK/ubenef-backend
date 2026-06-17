@@ -2,7 +2,8 @@
 from datetime import datetime
 
 class Delivery():
-    def __init__(self, distance, price, duration, date=None):
+    def __init__(self, distance, price, duration, date=None, id=None):
+        self.id = id
         self.distance = distance
         self.price = price
         self.duration = duration
@@ -16,6 +17,7 @@ class Delivery():
     
     def to_dict(self):
         return {
+        "delivery_id": self.id,
         "delivery_distance": self.distance, 
         "delivery_price": self.price,
         "delivery_duration": self.duration, 

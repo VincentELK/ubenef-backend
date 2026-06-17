@@ -40,7 +40,7 @@ def main():
     actions = [
         "Ajouter une livraison",
         "Afficher mes livraisons",
-        "Afficher mes statistiques",
+        "Supprimer une livraison",
         "Quitter",
     ]
     number_of_actions = len(actions)
@@ -73,18 +73,41 @@ def main():
             print(f"\nSauvegarde de la livraison en date du {new_delivery.date}\n")
                 
         elif choice == 2:
-            print("Affichage des livraisons sauvegardées :\n")
+            if data_manager.get_deliveries():
+                print("\n-----Affichage des livraisons sauvegardées :-----\n")
 
-            for delivery in data_manager.get_deliveries():
-                
-                print(f"Livraison du {delivery.date}")
-                print(f"  - Distance : {delivery.distance} km")
-                print(f"  - Temps    : {delivery.duration} min")
-                print(f"  - Prix     : {delivery.price} Euros\n")
+                for delivery in data_manager.get_deliveries():
+                    
+                    print(f"Livraison du {delivery.date}")
+                    print(f"  - ID       : {delivery.id}")
+                    print(f"  - Distance : {delivery.distance} km")
+                    print(f"  - Temps    : {delivery.duration} min")
+                    print(f"  - Prix     : {delivery.price} Euros\n")
+            else:
+                print("\nAucunes livraisons enregistrée\n")
             
 
         elif choice == 3:
-            print("Modifications en cours ...")
+            while True:
+                
+                if not data_manager.get_deliveries():
+                    print("\n----Il n'y a aucunes livraisons enregistrée----\n")
+                    break
+                try:
+                    delivery_id_to_delete = int(input("Selectionner l'id de la course a suprimer: \n"))
+
+                except ValueError:
+                    print("!! Saisie invalide !!")
+
+                    break
+                if data_manager.delete_delivery(delivery_id_to_delete):
+                    print(f"\nLa livraison {delivery_id_to_delete} à bien été supprimer!\n")
+                else:
+                    print(f"\nL'ID {delivery_id_to_delete} n'existe pas\n")
+                break
+
+            
+
           
             
             

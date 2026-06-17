@@ -26,7 +26,9 @@ class DataBaseManager():
     def save_delivery(self, delivery_obj):
         try:
             delivery_dict = delivery_obj.to_dict()
-            delivery_data = (delivery_dict["delivery_distance"],
+            
+            delivery_data = (
+                             delivery_dict["delivery_distance"],
                              delivery_dict["delivery_price"],
                              delivery_dict["delivery_duration"],
                              delivery_dict["delivery_date"],
@@ -41,20 +43,28 @@ class DataBaseManager():
             return f"Erreur lors de l'enregistrement des données : {e}"
         
     def get_deliveries(self):
-        delivery = self.cursor.execute("""SELECT distance, price, duration, date FROM deliveries""" )
+        delivery = self.cursor.execute("""SELECT id, distance, price, duration, date FROM deliveries""" )
         deliveries_object_list = []
         for row in delivery:
-            
-
-            db_distance = row[0]
-            db_price = row[1]
-            db_duration = row[2]
-            db_date = row[3]
-            delivery_object = Delivery(db_distance, db_price, db_duration, db_date)
+            db_id = row[0]
+            db_distance = row[1]
+            db_price = row[2]
+            db_duration = row[3]
+            db_date = row[4]
+            delivery_object = Delivery(db_distance, db_price, db_duration, db_date, db_id)
             deliveries_object_list.append(delivery_object)
         return deliveries_object_list
     
+    def delete_delivery(self, input_delivery_id):
+        try:
+            self.cursor.execute("DELETE FROM deliveries WHERE id = ?", (input_delivery_id,))
+            self.connection.commit()
 
+            if self.cursor.rowcount > 0:
+                return True
+            return False
+        except sqlite3.Error:
+            return False
 
 
     
