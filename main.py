@@ -18,12 +18,11 @@ def get_delivery_input():
             price    = float(price)
             duration = float(duration)
 
-            errors_list = validate_input(distance, price, duration)
+            errors_dict = validate_input(distance, price, duration)
 
-            if errors_list:
-                print(f"\nErreur(s) détectée(s):\n")
-                for error in errors_list:
-                    print(f"{error}\n")
+            for error_data in errors_dict.values():
+                print(f"{error_data["error_message\n"]}\n")
+
                 
                 continue
 
