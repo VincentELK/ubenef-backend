@@ -20,11 +20,12 @@ def get_delivery_input():
 
             errors_dict = validate_input(distance, price, duration)
 
-            for error_data in errors_dict.values():
-                print(f"{error_data["error_message\n"]}\n")
-
+            if errors_dict:
+                for error_data in errors_dict.values():
+                    print(f'\n{error_data["error_message"]}\n')
                 
                 continue
+                
 
             delivery = Delivery(distance, price, duration)
         except ValueError:
