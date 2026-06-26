@@ -33,11 +33,13 @@ class DataBaseManager():
                              delivery_dict["delivery_duration"],
                              delivery_dict["delivery_date"],
                              )
-            self.cursor.execute("""
-                                INSERT INTO deliveries(distance, price, duration, date) 
-                                VALUES(?, ?, ?, ?)""", delivery_data
-                                )
-            self.connection.commit()       
+            with sqlite3.connect("deliveries.db")as connection:
+                cursor = connection.cursor()
+                cursor.execute("""
+                                    INSERT INTO deliveries(distance, price, duration, date) 
+                                    VALUES(?, ?, ?, ?)""", delivery_data
+                                    )
+                  
 
         except sqlite3.Error as e:
             return f"Erreur lors de l'enregistrement des données : {e}"

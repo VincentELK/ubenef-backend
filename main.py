@@ -73,10 +73,11 @@ def main():
             print(f"\nSauvegarde de la livraison en date du {new_delivery.date}\n")
                 
         elif choice == 2:
-            if data_manager.get_deliveries():
+            deliveries_list = data_manager.get_deliveries()
+            if deliveries_list:
                 print("\n-----Affichage des livraisons sauvegardées :-----\n")
 
-                for delivery in data_manager.get_deliveries():
+                for delivery in deliveries_list:
                     
                     print(f"Livraison du {delivery.date}")
                     print(f"  - ID       : {delivery.id}")
