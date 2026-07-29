@@ -9,22 +9,28 @@ logging.basicConfig(filename='data_manager.log', level=logging.INFO, format='%(a
 class DataBaseManager():
     def __init__(self) -> None:
         self.db_path = "deliveries.db"
-    
-    def create_deliveries_table(self):
+
+
+    def init_db(self):
         try:
             with sqlite3.connect(self.db_path) as connection:
                 cursor = connection.cursor()
 
-            cursor.execute("""
-                                CREATE TABLE IF NOT EXISTS deliveries(
-                                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                distance REAL NOT NULL,
-                                price REAL NOT NULL,
-                                duration REAL NOT NULL,
-                                date TEXT NOT NULL
-                                );""")
+                cursor.execute("""
+                                    CREATE TABLE IF NOT EXISTS deliveries(
+                                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                    distance REAL NOT NULL,
+                                    price REAL NOT NULL,
+                                    duration REAL NOT NULL,
+                                    date TEXT NOT NULL
+                                    );""")
+                
+                cursor.execute(""" CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                    username TEXT NOT NULL UNIQUE,
+                                    password_hash TEXT NOT NULL,
+                                    email TEXT NOT NULL UNIQUE);""")
         except sqlite3.Error as e:
-            logging.error(f"Erreur lors de la creation de la table : {e}")
+            logging.error(f"Erreur lors de la creation de tables : {e}")
 
 
 
