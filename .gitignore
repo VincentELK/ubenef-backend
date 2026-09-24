@@ -1,6 +1,8 @@
 # Python-generated files
 __pycache__/
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
 *.py[oc]
 build/
 dist/
@@ -9,3 +11,23 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Secrets
+.env
+.env.*
