@@ -1,6 +1,8 @@
-import pytest
-from delivery_manager import Delivery
 from datetime import datetime
+
+from delivery_manager import Delivery
+
+
 def test_delivery_to_dict():
     test_delivery = Delivery(5.0, 3.0, 5.0, "10/05/2026", 2)
 

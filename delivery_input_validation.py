@@ -1,3 +1,6 @@
+from delivery_manager import Delivery
+
+
 def validate_input(distance, price, duration):
     errors_dict = {}
     distance_boundary = (0, 30)
@@ -25,6 +28,35 @@ def validate_input(distance, price, duration):
         errors_dict["duration"] = {"error_message": duration_error_msg, "value": duration}
     
     return errors_dict
+
+def get_delivery_input():
+    
+    while True:
+
+        distance = input("Distance parcourue (kilometres): ")
+        price    = input("Prix de la livraison: ")
+        duration = input("Durée de la livraison (minutes): ")
+
+        try :
+            distance = float(distance)
+            price    = float(price)
+            duration = float(duration)
+
+            errors_dict = validate_input(distance, price, duration)
+
+            if errors_dict:
+                for error_data in errors_dict.values():
+                    print(f'\n{error_data["error_message"]}\n')
+                
+                continue
+                
+
+            delivery = Delivery(distance, price, duration)
+        except ValueError:
+            print("Entrez une valeur numerique")
+            continue
+        
+        return delivery
 
 
 

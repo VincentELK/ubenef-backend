@@ -1,12 +1,11 @@
-import json
-from json import JSONDecodeError
-from delivery_manager import Delivery
-import sqlite3
 import logging
+import sqlite3
+
+from delivery_manager import Delivery
 
 logging.basicConfig(filename='data_manager.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-class DataBaseManager():
+class DataBaseManager:
     def __init__(self) -> None:
         self.db_path = "deliveries.db"
 
@@ -15,7 +14,7 @@ class DataBaseManager():
         try:
             with sqlite3.connect(self.db_path) as connection:
                 cursor = connection.cursor()
-
+                # creation de la table deliveries
                 cursor.execute("""
                                     CREATE TABLE IF NOT EXISTS deliveries(
                                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -24,7 +23,7 @@ class DataBaseManager():
                                     duration REAL NOT NULL,
                                     date TEXT NOT NULL
                                     );""")
-                
+                # creation de la table users
                 cursor.execute(""" CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT,
                                     username TEXT NOT NULL UNIQUE,
                                     password_hash TEXT NOT NULL,
