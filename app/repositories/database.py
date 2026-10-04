@@ -1,7 +1,7 @@
 import logging
 import sqlite3
 
-from delivery_manager import Delivery
+from app.models.delivery import Delivery
 
 logging.basicConfig(filename='data_manager.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 

@@ -1,4 +1,4 @@
-from delivery_manager import Delivery
+from app.models.delivery import Delivery
 
 
 def validate_input(distance, price, duration):

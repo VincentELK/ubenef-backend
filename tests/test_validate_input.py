@@ -1,4 +1,4 @@
-from delivery_input_validation import validate_input
+from app.validators.validation import validate_input
 
 
 def test_validate_input_all_invalid():

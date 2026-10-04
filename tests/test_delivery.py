@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from delivery_manager import Delivery
+from app.models.delivery import Delivery
 
 
 def test_delivery_to_dict():

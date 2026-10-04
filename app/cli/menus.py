@@ -1,34 +1,7 @@
-from data_manager import DataBaseManager
-from delivery_input_validation import get_delivery_input
+from app.repositories.database import DataBaseManager
+from app.validators.validation import get_delivery_input
 
 data_manager = DataBaseManager()
-
-
-def guess_menu():
-    actions = [
-        "Connexion",
-        "Inscription",
-        "Calculateur rapide",
-        "Quitter"
-    ]
-    number_of_actions = len(actions)
-
-    while True:
-        for i, action in enumerate(actions):
-            print(f"{i + 1}. {action}")
-
-        choice = input("\nSelectionnez une option: ")
-        try: 
-            choice = int(choice)
-        except ValueError:
-            
-            print(f"veuillez choisir un nombre valide entre 1 et {number_of_actions}")
-            continue
-
-        if choice not in range(1, number_of_actions + 1):
-            print(f"veuillez choisir un choix valide entre 1 et {number_of_actions}")
-            continue
-
 
 def member_main_menu():
         while True:
