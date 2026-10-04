@@ -9,7 +9,6 @@ class DataBaseManager:
     def __init__(self) -> None:
         self.db_path = "deliveries.db"
 
-
     def init_db(self):
         try:
             with sqlite3.connect(self.db_path) as connection:
