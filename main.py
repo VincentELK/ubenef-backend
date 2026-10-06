@@ -1,6 +1,8 @@
 from app.repositories.database import DataBaseManager
 from fastapi import FastAPI
 import app.cli.menus as menus
+from pydantic import BaseModel
+from app.validators.validation import validate_input
 data_manager = DataBaseManager()
 
 app = FastAPI()
@@ -16,6 +18,18 @@ async def get_deliveries():
         delivery_dict = delivery.to_dict()
         delivery_dict_list.append(delivery_dict)
     return delivery_dict_list
+
+class Delivery_info(BaseModel):
+    distance: float
+    price: float
+    duration: float
+
+@app.post("/deliveries")
+async def send_deliveries(delivery_info: Delivery_info ):
+    error_dict = validate_input(delivery_info.distance, delivery_info.price, delivery_info.duration)
+    
+    return delivery_info
+
 
 
 def main():
