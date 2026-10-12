@@ -1,5 +1,5 @@
 from app.repositories.database import DataBaseManager
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from app.models.delivery import Delivery
 import app.cli.menus as menus
 from pydantic import BaseModel
@@ -25,21 +25,24 @@ class Delivery_info(BaseModel):
     price: float
     duration: float
 
-@app.post("/delivery")
-async def send_delivery(delivery_info: Delivery_info ):
+@app.post("/deliveries")
+async def save_delivery(delivery_info: Delivery_info ):
 
     error_dict = validate_input(delivery_info.distance, delivery_info.price, delivery_info.duration)
     if not error_dict:
         delivery_obj = Delivery(delivery_info.distance, delivery_info.price, delivery_info.duration)
         data_manager.save_delivery(delivery_obj)
-        return delivery_info
+        return delivery_obj
     else:
-        return error_dict
+        raise HTTPException(400, detail=error_dict)
+        
     
-@app.delete("/delivery/{delivery_id}")
+@app.delete("/deliveries/{delivery_id}")
 async def delete_delivery(delivery_id: int):
-    data_manager.delete_delivery(delivery_id)
+    if not data_manager.delete_delivery(delivery_id):
+        raise HTTPException(404, detail="This ID don't exist")
     return {"Message": f"Delivery number {delivery_id} as been deleted"}
+    
 
 def main():
     data_manager.init_db()

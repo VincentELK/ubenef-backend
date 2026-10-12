@@ -49,7 +49,7 @@ class DataBaseManager:
                                     VALUES(?, ?, ?, ?)""", delivery_data
                                     )
                   
-
+                delivery_obj.id = cursor.lastrowid # recupere l'id du dernier INSERT
         except sqlite3.Error as e:
             logging.error(f"Erreur lors de l'enregistrement des données : {e}")
 
