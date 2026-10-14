@@ -37,10 +37,10 @@ class DataBaseManager:
             delivery_dict = delivery_obj.to_dict()
             
             delivery_data = (
-                             delivery_dict["delivery_distance"],
-                             delivery_dict["delivery_price"],
-                             delivery_dict["delivery_duration"],
-                             delivery_dict["delivery_date"],
+                             delivery_dict["distance"],
+                             delivery_dict["price"],
+                             delivery_dict["duration"],
+                             delivery_dict["date"],
                              )
             with sqlite3.connect(self.db_path) as connection:
                 cursor = connection.cursor()
@@ -49,7 +49,7 @@ class DataBaseManager:
                                     VALUES(?, ?, ?, ?)""", delivery_data
                                     )
                   
-                delivery_obj.id = cursor.lastrowid # recupere l'id du dernier INSERT
+                delivery_obj.id = cursor.lastrowid  # recupere l'id du dernier INSERT
         except sqlite3.Error as e:
             logging.error(f"Erreur lors de l'enregistrement des données : {e}")
 

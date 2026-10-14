@@ -3,6 +3,7 @@ from fastapi import FastAPI, HTTPException
 from app.models.delivery import Delivery
 import app.cli.menus as menus
 from pydantic import BaseModel
+from app.schemas.schemas import CreateDelivery, DeliveryResponse
 from app.validators.validation import validate_input
 data_manager = DataBaseManager()
 
@@ -11,22 +12,18 @@ app = FastAPI()
 async def root():
     return {"message": "Hello World"}
 
-@app.get("/deliveries")
-async def get_deliveries():
+@app.get("/deliveries", status_code=200, response_model=list[DeliveryResponse])
+async def get_deliveries(): 
     deliveries_obj_list = data_manager.get_deliveries()
-    delivery_dict_list = []
+    deliveries_dict_list = []
     for delivery in deliveries_obj_list:
         delivery_dict = delivery.to_dict()
-        delivery_dict_list.append(delivery_dict)
-    return delivery_dict_list
+        deliveries_dict_list.append(delivery_dict)
+    return deliveries_dict_list
 
-class Delivery_info(BaseModel):
-    distance: float
-    price: float
-    duration: float
 
-@app.post("/deliveries")
-async def save_delivery(delivery_info: Delivery_info ):
+@app.post("/deliveries", status_code=201, response_model=DeliveryResponse)
+async def save_delivery(delivery_info: CreateDelivery) :
 
     error_dict = validate_input(delivery_info.distance, delivery_info.price, delivery_info.duration)
     if not error_dict:
@@ -34,14 +31,14 @@ async def save_delivery(delivery_info: Delivery_info ):
         data_manager.save_delivery(delivery_obj)
         return delivery_obj
     else:
-        raise HTTPException(400, detail=error_dict)
+        raise HTTPException(status_code=400, detail=error_dict)
         
     
-@app.delete("/deliveries/{delivery_id}")
+@app.delete("/deliveries/{delivery_id}", status_code=200)
 async def delete_delivery(delivery_id: int):
     if not data_manager.delete_delivery(delivery_id):
-        raise HTTPException(404, detail="This ID don't exist")
-    return {"Message": f"Delivery number {delivery_id} as been deleted"}
+        raise HTTPException(status_code=404, detail="This ID doesn't exist")
+    return {"message": f"Delivery number {delivery_id} has been deleted"}
     
 
 def main():

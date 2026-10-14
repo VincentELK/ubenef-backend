@@ -18,11 +18,11 @@ class Delivery:
     
     def to_dict(self):
         return {
-        "delivery_id": self.id,
-        "delivery_distance": self.distance, 
-        "delivery_price": self.price,
-        "delivery_duration": self.duration, 
-        "delivery_date": self.date
+        "id": self.id,
+        "distance": self.distance, 
+        "price": self.price,
+        "duration": self.duration, 
+        "date": self.date
         }
 
     def price_per_kilometer(self):
