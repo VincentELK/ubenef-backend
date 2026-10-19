@@ -74,7 +74,24 @@ class DataBaseManager:
         except sqlite3.Error as e:
             logging.error(f"Erreur lors de la récupération des données : {e}")
             return []
-    
+        
+    def get_delivery_by_id(self, id):
+        try:
+            with sqlite3.connect(self.db_path) as connection:
+                cursor = connection.cursor()
+                cursor.execute("SELECT id, distance, price, duration, date FROM deliveries WHERE id = ?", (id,))
+                delivery = cursor.fetchone()
+                if not delivery:
+                    return None
+                id = delivery[0]
+                distance = delivery[1]
+                price = delivery[2]
+                duration = delivery[3]
+                date = delivery[4]
+                return Delivery(distance, price, duration, date, id)
+        except sqlite3.Error as e:
+            logging.error(f"Erreur lors de la récupération de la livraison : {e}")
+
     def delete_delivery(self, input_delivery_id):
         try:
             with sqlite3.connect(self.db_path) as connection:

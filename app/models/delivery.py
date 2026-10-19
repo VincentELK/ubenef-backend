@@ -16,7 +16,7 @@ class Delivery:
         formated_date = "%s/%s/%s" %(date.day, date.month, date.year)
         return formated_date
     
-    def to_dict(self):
+    def to_dict(self) -> dict:
         return {
         "id": self.id,
         "distance": self.distance, 
