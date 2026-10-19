@@ -11,3 +11,12 @@ class DeliveryResponse(BaseModel):
     price: float
     duration: float
     date: str
+
+class StatsResponse(BaseModel):
+    total_deliveries: int
+    total_price: float
+    total_duration: float
+    total_distance: float
+    average_distance: float
+    average_price: float
+    average_duration: float

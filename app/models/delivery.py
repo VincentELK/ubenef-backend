@@ -25,8 +25,7 @@ class Delivery:
         "date": self.date
         }
 
-    def price_per_kilometer(self):
-        return round(self.price / self.distance, 2)
+
 
 
 

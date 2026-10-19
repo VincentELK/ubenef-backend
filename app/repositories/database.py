@@ -8,7 +8,7 @@ logging.basicConfig(filename='data_manager.log', level=logging.INFO, format='%(a
 class DataBaseManager:
     def __init__(self) -> None:
         self.db_path = "deliveries.db"
-
+        
     def init_db(self):
         try:
             with sqlite3.connect(self.db_path) as connection:
@@ -105,8 +105,43 @@ class DataBaseManager:
             logging.error(f"Erreur lors de la suppression de livraison : {e}")
             return False
 
+    def get_stats(self) -> dict:
+        try:
+            with sqlite3.connect(self.db_path) as connection:
+                cursor = connection.cursor()
+                cursor.execute("""SELECT COUNT(*),
+                                                SUM(distance),
+                                                SUM(price),
+                                                SUM(duration),
+                                                AVG(distance),
+                                                AVG(price),
+                                                AVG(duration)
+                                                FROM deliveries""")
+                stats_tuple = cursor.fetchone()
 
-    
+                total_deliveries = stats_tuple[0]
+                total_distance = stats_tuple[1] if stats_tuple[1] is not None else 0
+                total_price = stats_tuple[2] if stats_tuple[2] is not None else 0
+                total_duration = stats_tuple[3] if stats_tuple[3] is not None else 0
+                average_distance = stats_tuple[4] if stats_tuple[4] is not None else 0
+                average_price = stats_tuple[5] if stats_tuple[5] is not None else 0
+                average_duration = stats_tuple[6] if stats_tuple[6] is not None else 0
+
+                return {"total_deliveries": total_deliveries,
+                        "total_price": total_price,
+                        "total_duration": total_duration,
+                        "total_distance": total_distance,
+                        "average_distance": average_distance,
+                        "average_price": average_price,
+                        "average_duration": average_duration
+                        }
+                
+
+        except sqlite3.Error as e:
+            logging.error(f"Erreur lors de la récupération des statistiques : {e}")
+            return {}
+
+
     
 
         
