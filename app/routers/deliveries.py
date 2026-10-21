@@ -5,7 +5,6 @@ from fastapi import FastAPI, HTTPException, APIRouter
 from app.models.delivery import Delivery
 
 data_manager = DataBaseManager()
-app = FastAPI()
 router = APIRouter()
 
 @router.get("/", status_code=200, response_model=list[DeliveryResponse])
