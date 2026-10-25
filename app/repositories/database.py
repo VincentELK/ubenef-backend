@@ -6,8 +6,8 @@ from app.models.delivery import Delivery
 logging.basicConfig(filename='data_manager.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class DataBaseManager:
-    def __init__(self) -> None:
-        self.db_path = "deliveries.db"
+    def __init__(self, db_path="deliveries.db") -> None:
+        self.db_path = db_path
         
     def init_db(self):
         try:
@@ -30,6 +30,16 @@ class DataBaseManager:
         except sqlite3.Error as e:
             logging.error(f"Erreur lors de la creation de tables : {e}")
 
+    def delete_deliveries(self):
+        try: 
+            with sqlite3.connect(self.db_path) as connection:
+                cursor = connection.cursor()
+                cursor.execute("DELETE FROM deliveries")
+                if cursor.rowcount > 0:
+                    return True
+                return False
+        except sqlite3.Error as e:
+            logging.error(f"Erreur lors de la suppression des donnés : {e}")
 
 
     def save_delivery(self, delivery_obj):
@@ -105,7 +115,7 @@ class DataBaseManager:
             logging.error(f"Erreur lors de la suppression de livraison : {e}")
             return False
 
-    def get_stats(self) -> dict:
+    def get_stats(self) -> dict :
         try:
             with sqlite3.connect(self.db_path) as connection:
                 cursor = connection.cursor()
@@ -127,6 +137,7 @@ class DataBaseManager:
                 average_price = stats_tuple[5] if stats_tuple[5] is not None else 0
                 average_duration = stats_tuple[6] if stats_tuple[6] is not None else 0
 
+        
                 return {"total_deliveries": total_deliveries,
                         "total_price": total_price,
                         "total_duration": total_duration,
@@ -134,7 +145,8 @@ class DataBaseManager:
                         "average_distance": average_distance,
                         "average_price": average_price,
                         "average_duration": average_duration
-                        }
+                    }
+               
                 
 
         except sqlite3.Error as e:

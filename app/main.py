@@ -9,8 +9,3 @@ print("Db initialisée")
 app = FastAPI()
 app.include_router(deliveries.router, prefix="/deliveries", tags=["deliveries"])
 app.include_router(stats.router, prefix="/stats", tags=["stats"])
-
-
-
-
-
