@@ -1,8 +1,9 @@
 from app.repositories.database import DataBaseManager
 import app.cli.menus as menus
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from app.routers import deliveries, stats
-data_manager = DataBaseManager()
+from app.dependencies import get_data_manager
+data_manager = get_data_manager()
 data_manager.init_db()
 print("Db initialisée")
 

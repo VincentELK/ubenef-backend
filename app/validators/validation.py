@@ -1,7 +1,7 @@
 from app.models.delivery import Delivery
 
 
-def validate_input(distance, price, duration):
+def validate_input(distance, price, duration) -> dict:
     errors_dict = {}
     distance_boundary = (0, 30)
     price_boundary = (0, 20)
@@ -29,34 +29,34 @@ def validate_input(distance, price, duration):
     
     return errors_dict
 
-def get_delivery_input():
+# def get_delivery_input():
     
-    while True:
+#     while True:
 
-        distance = input("Distance parcourue (kilometres): ")
-        price    = input("Prix de la livraison: ")
-        duration = input("Durée de la livraison (minutes): ")
+#         distance = input("Distance parcourue (kilometres): ")
+#         price    = input("Prix de la livraison: ")
+#         duration = input("Durée de la livraison (minutes): ")
 
-        try :
-            distance = float(distance)
-            price    = float(price)
-            duration = float(duration)
+#         try :
+#             distance = float(distance)
+#             price    = float(price)
+#             duration = float(duration)
 
-            errors_dict = validate_input(distance, price, duration)
+#             errors_dict = validate_input(distance, price, duration)
 
-            if errors_dict:
-                for error_data in errors_dict.values():
-                    print(f'\n{error_data["error_message"]}\n')
+#             if errors_dict:
+#                 for error_data in errors_dict.values():
+#                     print(f'\n{error_data["error_message"]}\n')
                 
-                continue
+#                 continue
                 
 
-            delivery = Delivery(distance, price, duration)
-        except ValueError:
-            print("Entrez une valeur numerique")
-            continue
+#             delivery = Delivery(distance, price, duration)
+#         except ValueError:
+#             print("Entrez une valeur numerique")
+#             continue
         
-        return delivery
+        # return delivery
 
 
 

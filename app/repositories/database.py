@@ -30,7 +30,7 @@ class DataBaseManager:
         except sqlite3.Error as e:
             logging.error(f"Erreur lors de la creation de tables : {e}")
 
-    def delete_deliveries(self):
+    def delete_all_deliveries(self) -> bool:
         try: 
             with sqlite3.connect(self.db_path) as connection:
                 cursor = connection.cursor()
@@ -40,7 +40,7 @@ class DataBaseManager:
                 return False
         except sqlite3.Error as e:
             logging.error(f"Erreur lors de la suppression des donnés : {e}")
-
+            return False
 
     def save_delivery(self, delivery_obj):
         try:
