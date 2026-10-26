@@ -1,7 +1,5 @@
 
 from datetime import datetime
-
-
 class Delivery:
     def __init__(self, distance, price, duration, date=None, id=None):
         self.id = id

@@ -5,7 +5,7 @@ from app.repositories.database import DataBaseManager
 from app.dependencies import get_data_manager
 
 
-def get_test_data_manager():
+def get_test_data_manager() -> DataBaseManager:
     return DataBaseManager("tests/test.db")
 
 
@@ -18,3 +18,8 @@ def test_context():
     client = TestClient(app)
     yield client
     app.dependency_overrides = {}
+
+
+
+
+

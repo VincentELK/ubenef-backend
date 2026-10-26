@@ -24,7 +24,7 @@ async def get_delivery_by_id(id: int, data_manager: DataBaseManager = Depends(ge
     return delivery
 
     
-@router.post("/", status_code=201, response_model=DeliveryResponse)
+@router.post("/", status_code=200, response_model=DeliveryResponse)
 async def save_delivery(delivery_info: CreateDelivery, data_manager: DataBaseManager = Depends(get_data_manager)) :
 
     error_dict = validate_input(delivery_info.distance, delivery_info.price, delivery_info.duration)
