@@ -4,7 +4,7 @@ class CreateDelivery(BaseModel):
     distance: float
     price: float
     duration: float
-
+    
 class DeliveryResponse(BaseModel):
     id: int
     distance: float

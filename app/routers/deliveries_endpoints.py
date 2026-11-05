@@ -30,7 +30,7 @@ async def save_delivery(delivery_info: CreateDelivery, data_manager: DataBaseMan
     error_dict = validate_input(delivery_info.distance, delivery_info.price, delivery_info.duration)
     if not error_dict:
         delivery_obj = Delivery(delivery_info.distance, delivery_info.price, delivery_info.duration)
-        data_manager.save_delivery(delivery_obj)
+        data_manager.save_delivery(delivery_obj, user_id=1)
         return delivery_obj
     else:
         raise HTTPException(status_code=400, detail=error_dict)

@@ -12,7 +12,15 @@ class DataBaseManager:
     def init_db(self):
         try:
             with sqlite3.connect(self.db_path) as connection:
+                connection.execute("PRAGMA foreign_keys = ON")
                 cursor = connection.cursor()
+
+                # creation de la table users
+                cursor.execute(""" CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                username TEXT NOT NULL UNIQUE,
+                password_hash TEXT NOT NULL,
+                email TEXT NOT NULL UNIQUE);""")
+
                 # creation de la table deliveries
                 cursor.execute("""
                                     CREATE TABLE IF NOT EXISTS deliveries(
@@ -20,15 +28,16 @@ class DataBaseManager:
                                     distance REAL NOT NULL,
                                     price REAL NOT NULL,
                                     duration REAL NOT NULL,
-                                    date TEXT NOT NULL
+                                    date TEXT NOT NULL,
+                                    user_id INTEGER NOT NULL,
+                                    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id)
                                     );""")
-                # creation de la table users
-                cursor.execute(""" CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                    username TEXT NOT NULL UNIQUE,
-                                    password_hash TEXT NOT NULL,
-                                    email TEXT NOT NULL UNIQUE);""")
+                user_test = (1, "user_test", "pw_test", "email_test",)
+                cursor.execute(""" INSERT OR IGNORE INTO users(id, username, password_hash, email) VALUES (?, ?, ?, ?)""", user_test)
+
         except sqlite3.Error as e:
             logging.error(f"Erreur lors de la creation de tables : {e}")
+            raise
 
     def delete_all_deliveries(self) -> bool:
         try: 
@@ -42,26 +51,36 @@ class DataBaseManager:
             logging.error(f"Erreur lors de la suppression des donnés : {e}")
             return False
 
-    def save_delivery(self, delivery_obj):
+    def save_delivery(self, delivery_obj, user_id):
         try:
-            delivery_dict = delivery_obj.to_dict()
-            
-            delivery_data = (
+
+            with sqlite3.connect(self.db_path) as connection:
+                cursor = connection.cursor()
+                cursor.execute("SELECT id FROM users WHERE id = ?", (user_id,))
+                user = cursor.fetchone()
+                if not user:
+                    return None
+                
+                delivery_dict = delivery_obj.to_dict()
+                delivery_data = (
                              delivery_dict["distance"],
                              delivery_dict["price"],
                              delivery_dict["duration"],
                              delivery_dict["date"],
+                             user_id
                              )
-            with sqlite3.connect(self.db_path) as connection:
-                cursor = connection.cursor()
                 cursor.execute("""
-                                    INSERT INTO deliveries(distance, price, duration, date) 
-                                    VALUES(?, ?, ?, ?)""", delivery_data
+                                    INSERT INTO deliveries(distance, price, duration, date, user_id) 
+                                    VALUES(?, ?, ?, ?, ?)""", delivery_data
                                     )
-                  
+                
                 delivery_obj.id = cursor.lastrowid  # recupere l'id du dernier INSERT
+                return delivery_obj
+
+            
         except sqlite3.Error as e:
             logging.error(f"Erreur lors de l'enregistrement des données : {e}")
+            raise
 
         
     def get_deliveries(self):
