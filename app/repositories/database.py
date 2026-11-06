@@ -29,9 +29,9 @@ class DataBaseManager:
                                     price REAL NOT NULL,
                                     duration REAL NOT NULL,
                                     date TEXT NOT NULL,
-                                    user_id INTEGER NOT NULL,
-                                    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id)
+                                    user_id INTEGER NOT NULL REFERENCES users(id)
                                     );""")
+                
                 user_test = (1, "user_test", "pw_test", "email_test",)
                 cursor.execute(""" INSERT OR IGNORE INTO users(id, username, password_hash, email) VALUES (?, ?, ?, ?)""", user_test)
 
@@ -39,11 +39,11 @@ class DataBaseManager:
             logging.error(f"Erreur lors de la creation de tables : {e}")
             raise
 
-    def delete_all_deliveries(self) -> bool:
+    def delete_all_deliveries(self, user_id) -> bool:
         try: 
             with sqlite3.connect(self.db_path) as connection:
                 cursor = connection.cursor()
-                cursor.execute("DELETE FROM deliveries")
+                cursor.execute("DELETE FROM deliveries WHERE user_id = ?", (user_id,))
                 if cursor.rowcount > 0:
                     return True
                 return False
@@ -83,13 +83,12 @@ class DataBaseManager:
             raise
 
         
-    def get_deliveries(self):
+    def get_deliveries(self, user_id):
 
         try :
             with sqlite3.connect(self.db_path) as connection:
                 cursor = connection.cursor()
-
-                delivery = cursor.execute("""SELECT id, distance, price, duration, date FROM deliveries""" )
+                delivery = cursor.execute("""SELECT id, distance, price, duration, date FROM deliveries WHERE user_id = ?""", (user_id,) )
                 deliveries_object_list = []
                 for row in delivery:
                     db_id = row[0]
@@ -104,11 +103,16 @@ class DataBaseManager:
             logging.error(f"Erreur lors de la récupération des données : {e}")
             return []
         
-    def get_delivery_by_id(self, id):
+    def get_delivery_by_id(self, id, user_id):
         try:
             with sqlite3.connect(self.db_path) as connection:
                 cursor = connection.cursor()
-                cursor.execute("SELECT id, distance, price, duration, date FROM deliveries WHERE id = ?", (id,))
+                cursor.execute("""
+                SELECT id, distance, price, duration, date 
+                FROM deliveries
+                WHERE id = ? 
+                AND user_id = ?""", (id, user_id,)
+                )
                 delivery = cursor.fetchone()
                 if not delivery:
                     return None
@@ -121,11 +125,13 @@ class DataBaseManager:
         except sqlite3.Error as e:
             logging.error(f"Erreur lors de la récupération de la livraison : {e}")
 
-    def delete_delivery(self, input_delivery_id):
+    def delete_delivery(self, input_delivery_id, user_id):
         try:
             with sqlite3.connect(self.db_path) as connection:
                 cursor = connection.cursor()
-                cursor.execute("DELETE FROM deliveries WHERE id = ?", (input_delivery_id,))
+                cursor.execute("""DELETE FROM deliveries 
+                               WHERE id = ?
+                               AND user_id = ?""", (input_delivery_id, user_id,))
                 
                 if cursor.rowcount > 0:
                     return True
@@ -134,7 +140,7 @@ class DataBaseManager:
             logging.error(f"Erreur lors de la suppression de livraison : {e}")
             return False
 
-    def get_stats(self) -> dict :
+    def get_stats(self, user_id) -> dict :
         try:
             with sqlite3.connect(self.db_path) as connection:
                 cursor = connection.cursor()
@@ -145,7 +151,8 @@ class DataBaseManager:
                                                 AVG(distance),
                                                 AVG(price),
                                                 AVG(duration)
-                                                FROM deliveries""")
+                                                FROM deliveries
+                                                WHERE user_id = ?""",(user_id,))
                 stats_tuple = cursor.fetchone()
 
                 total_deliveries = stats_tuple[0]
@@ -156,7 +163,6 @@ class DataBaseManager:
                 average_price = stats_tuple[5] if stats_tuple[5] is not None else 0
                 average_duration = stats_tuple[6] if stats_tuple[6] is not None else 0
 
-        
                 return {"total_deliveries": total_deliveries,
                         "total_price": total_price,
                         "total_duration": total_duration,
@@ -166,8 +172,6 @@ class DataBaseManager:
                         "average_duration": average_duration
                     }
                
-                
-
         except sqlite3.Error as e:
             logging.error(f"Erreur lors de la récupération des statistiques : {e}")
             return {}
