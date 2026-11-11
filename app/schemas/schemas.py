@@ -1,5 +1,15 @@
 from pydantic import BaseModel
 
+class CreateUser(BaseModel):
+    username: str
+    password: str
+    email: str
+
+class CreateUserResponse(BaseModel):
+    username: str
+    email: str
+    
+
 class CreateDelivery(BaseModel):
     distance: float
     price: float

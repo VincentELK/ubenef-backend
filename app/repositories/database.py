@@ -1,6 +1,6 @@
 import logging
 import sqlite3
-
+from app.security import get_password_hash, verify_hash
 from app.models.delivery import Delivery
 
 logging.basicConfig(filename='data_manager.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -37,6 +37,27 @@ class DataBaseManager:
 
         except sqlite3.Error as e:
             logging.error(f"Erreur lors de la creation de tables : {e}")
+            raise
+        
+    def create_user(self, username, user_pwd_hash, email):
+        try :
+            with sqlite3.connect(self.db_path) as connection:
+                cursor = connection.cursor()
+                
+                user_infos_tuple = (username, user_pwd_hash, email,)
+                cursor.execute("INSERT INTO users(username, password_hash, email) VALUES (?, ?, ?)", user_infos_tuple)
+
+                user_id = cursor.lastrowid
+
+                if cursor.rowcount == 0:
+                    return False
+                return {"id": user_id,
+                        "username": username,
+                        "email" : email
+                        }
+
+        except  sqlite3.Error as e:
+            logging.error(f"Erreur lors de la creation du compte : {e}")
             raise
 
     def delete_all_deliveries(self, user_id) -> bool:

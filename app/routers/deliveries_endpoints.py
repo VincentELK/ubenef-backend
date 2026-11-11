@@ -6,7 +6,7 @@ from app.models.delivery import Delivery
 from app.dependencies import get_data_manager
 
 router = APIRouter()
-
+# user_id = 1 est temporraire, à remplacer par le user authentifié...
 @router.get("/", status_code=200, response_model=list[DeliveryResponse])
 async def get_deliveries(data_manager: DataBaseManager = Depends(get_data_manager)): 
     deliveries_obj_list = data_manager.get_deliveries(user_id=1)
@@ -44,7 +44,7 @@ async def delete_delivery(delivery_id: int, data_manager: DataBaseManager = Depe
 
 @router.delete("/", status_code=200)
 async def delete_all_deliveries(data_manager: DataBaseManager = Depends(get_data_manager)):
-    if not data_manager.delete_all_deliveries(user_id=1):
+    if not data_manager.delete_all_deliveries(user_id=2):
         raise HTTPException(status_code=404, detail="There is no delivery saved")
     else:
         return {"Message": f"Every delivery has been deleted sucessfully"}
