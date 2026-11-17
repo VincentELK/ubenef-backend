@@ -14,11 +14,10 @@ def test_context():
     app.dependency_overrides[get_data_manager] = get_test_data_manager
     testing_db = get_test_data_manager()
     testing_db.init_db()
-    testing_db.delete_all_deliveries()
+    testing_db.delete_all_deliveries(user_id=1)
     client = TestClient(app)
     yield client
     app.dependency_overrides = {}
-
 
 
 

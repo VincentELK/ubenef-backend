@@ -13,7 +13,7 @@
 #                 "Quitter",
 #             ]
 #             number_of_actions = len(actions)
-#             print("\nChoisissez parmis les options suivante :")
+#             print("\nChoisissez parmis les options suivante :"
 
 #             for i, action in enumerate(actions):
 #                 print(f"{i + 1}. {action}")
@@ -26,7 +26,6 @@
                 
 #                 print(f"veuillez choisir un choix valide entre 1 et {number_of_actions}")
 #                 continue
-
 #             if choice not in range(1, number_of_actions + 1):
 #                 print(f"veuillez choisir un choix valide entre 1 et {number_of_actions}")
 #                 continue

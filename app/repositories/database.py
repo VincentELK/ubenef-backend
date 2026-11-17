@@ -1,6 +1,5 @@
 import logging
 import sqlite3
-from app.security import get_password_hash, verify_hash
 from app.models.delivery import Delivery
 
 logging.basicConfig(filename='data_manager.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -53,9 +52,10 @@ class DataBaseManager:
                     return False
                 return {"id": user_id,
                         "username": username,
-                        "email" : email
                         }
 
+        except sqlite3.IntegrityError:
+            return None 
         except  sqlite3.Error as e:
             logging.error(f"Erreur lors de la creation du compte : {e}")
             raise
