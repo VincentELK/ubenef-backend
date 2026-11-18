@@ -4,11 +4,14 @@ from app.repositories.database import DataBaseManager
 from fastapi import Depends, HTTPException, APIRouter
 from app.models.delivery import Delivery
 from app.dependencies import get_data_manager
+from typing import Annotated
+from app.security import get_oauth2_scheme
 
+oauth2_scheme = get_oauth2_scheme()
 router = APIRouter()
 # user_id = 1 est temporraire, à remplacer par le user authentifié...
 @router.get("/", status_code=200, response_model=list[DeliveryResponse])
-async def get_deliveries(data_manager: DataBaseManager = Depends(get_data_manager)): 
+async def get_deliveries(token: Annotated[str, Depends(oauth2_scheme)] ,data_manager: DataBaseManager = Depends(get_data_manager)): 
     deliveries_obj_list = data_manager.get_deliveries(user_id=1)
     deliveries_dict_list = []
     for delivery in deliveries_obj_list:
