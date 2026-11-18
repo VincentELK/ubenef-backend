@@ -11,7 +11,7 @@ async def user_register(user_info : CreateUser, data_manager : DataBaseManager =
     
     pwd_hash = get_password_hash(user_info.password)
     
-    user_dict_infos = data_manager.create_user(user_info.username, user_info.password, user_info.email)    
+    user_dict_infos = data_manager.create_user(user_info.username, pwd_hash, user_info.email)    
     if  not user_dict_infos:
         raise HTTPException(status_code=400, detail="Nom d'utilisateur ou email déjà utilisé")
     return user_dict_infos 
