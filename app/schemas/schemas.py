@@ -4,7 +4,7 @@ class CreateUser(BaseModel):
     username: str
     password: str
     email: str
-
+    disabled: bool
 class CreateUserResponse(BaseModel):
     username: str
     email: str

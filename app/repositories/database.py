@@ -18,7 +18,8 @@ class DataBaseManager:
                 cursor.execute(""" CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT NOT NULL UNIQUE,
                 password_hash TEXT NOT NULL,
-                email TEXT NOT NULL UNIQUE);""")
+                email TEXT NOT NULL UNIQUE,
+                disabled BOOL NOT NULL);""")
 
                 # creation de la table deliveries
                 cursor.execute("""
@@ -31,20 +32,20 @@ class DataBaseManager:
                                     user_id INTEGER NOT NULL REFERENCES users(id)
                                     );""")
                 
-                user_test = (1, "user_test", "pw_test", "email_test",)
-                cursor.execute(""" INSERT OR IGNORE INTO users(id, username, password_hash, email) VALUES (?, ?, ?, ?)""", user_test)
+                user_test = (1, "user_test", "pw_test", "email_test", False)
+                cursor.execute(""" INSERT OR IGNORE INTO users(id, username, password_hash, email, disabled) VALUES (?, ?, ?, ?, ?)""", user_test)
 
         except sqlite3.Error as e:
             logging.error(f"Erreur lors de la creation de tables : {e}")
             raise
         
-    def create_user(self, username, user_pwd_hash, email):
+    def create_user(self, username, user_pwd_hash, email, disabled):
         try :
             with sqlite3.connect(self.db_path) as connection:
                 cursor = connection.cursor()
                 
-                user_infos_tuple = (username, user_pwd_hash, email,)
-                cursor.execute("INSERT INTO users(username, password_hash, email) VALUES (?, ?, ?)", user_infos_tuple)
+                user_infos_tuple = (username, user_pwd_hash, email, disabled)
+                cursor.execute("INSERT INTO users(username, password_hash, email, disabled) VALUES (?, ?, ?, ?)", user_infos_tuple)
 
                 user_id = cursor.lastrowid
 
@@ -52,7 +53,8 @@ class DataBaseManager:
                     return False
                 return {"id": user_id,
                         "username": username,
-                        "email": email
+                        "email": email,
+                        "disabled": disabled
                         }
 
         except sqlite3.IntegrityError: return None 
