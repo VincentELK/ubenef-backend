@@ -1,14 +1,19 @@
 from pydantic import BaseModel
 
-class CreateUser(BaseModel):
+class UserBase(BaseModel):
     username: str
-    password: str
     email: str
     disabled: bool
+
 class CreateUserResponse(BaseModel):
     username: str
     email: str
+
+class UserIn(UserBase):
+    password: str
     
+class UserOut(UserBase):
+    pass 
 
 class CreateDelivery(BaseModel):
     distance: float

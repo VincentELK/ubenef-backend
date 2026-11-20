@@ -1,13 +1,13 @@
 from app.repositories.database import DataBaseManager
 from fastapi import  APIRouter, Depends, HTTPException
 from app.dependencies import get_data_manager
-from app.schemas.schemas import CreateUser, CreateUserResponse
+from app.schemas.schemas import UserIn, CreateUserResponse
 from app.security import get_password_hash, verify_hash
 data_manager = DataBaseManager()
 router = APIRouter()
 
 @router.post("/", status_code=200, response_model=CreateUserResponse)
-async def user_register(user_info : CreateUser, data_manager : DataBaseManager = Depends(get_data_manager)):
+async def user_register(user_info : UserIn, data_manager : DataBaseManager = Depends(get_data_manager)):
     
     pwd_hash = get_password_hash(user_info.password)
     
