@@ -5,15 +5,21 @@ class UserBase(BaseModel):
     email: str
     disabled: bool
 
-class CreateUserResponse(BaseModel):
-    username: str
-    email: str
 
 class UserIn(UserBase):
     password: str
-    
+
+
 class UserOut(UserBase):
     pass 
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    username: str
+
 
 class CreateDelivery(BaseModel):
     distance: float

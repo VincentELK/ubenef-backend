@@ -1462,6 +1462,7 @@ dependencies = [
     { name = "httpx2" },
     { name = "pwdlib", extra = ["argon2"] },
     { name = "pyjwt" },
+    { name = "python-dotenv" },
     { name = "python-multipart" },
 ]
 
@@ -1479,6 +1480,7 @@ requires-dist = [
     { name = "httpx2", specifier = ">=2.16.0" },
     { name = "pwdlib", extras = ["argon2"], specifier = ">=0.3.1" },
     { name = "pyjwt", specifier = ">=2.15.1" },
+    { name = "python-dotenv", specifier = ">=1.2.4" },
     { name = "python-multipart", specifier = ">=0.0.32" },
 ]
 

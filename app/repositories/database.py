@@ -62,6 +62,28 @@ class DataBaseManager:
             logging.error(f"Erreur lors de la creation du compte : {e}")
             raise
 
+
+    def get_user(self, username: str) -> dict | None :
+        try:
+            with sqlite3.connect(self.db_path) as connection:
+                cursor = connection.cursor()
+                
+                cursor.execute("SELECT id, username, password_hash, email, disabled FROM users WHERE username = ?",(username,))
+                user = cursor.fetchone()
+                if user is None:
+                    return None
+                return {"id": user[0],
+                        "username": user[1],
+                        "password_hash": user[2],
+                        "email": user[3],
+                        "disabled": user[4]
+
+                        }
+        except sqlite3.Error as e:
+            logging.error(f"Erreur lors de la recuperation du user : {e}")
+            raise
+                
+
     def delete_all_deliveries(self, user_id) -> bool:
         try: 
             with sqlite3.connect(self.db_path) as connection:

@@ -1,7 +1,7 @@
 from app.repositories.database import DataBaseManager
 import app.cli.menus as menus
 from fastapi import FastAPI, Depends
-from app.routers import deliveries_endpoints, stats, register
+from app.routers import auth, deliveries_endpoints, stats
 from app.dependencies import get_data_manager
 data_manager = get_data_manager()
 data_manager.init_db()
@@ -11,4 +11,4 @@ print("Db initialisée")
 app = FastAPI()
 app.include_router(deliveries_endpoints.router, prefix="/deliveries", tags=["deliveries"])
 app.include_router(stats.router, prefix="/stats", tags=["stats"])
-app.include_router(register.router, prefix="/register", tags=["register"])
+app.include_router(auth.router, prefix="/auth", tags=["auth"])
